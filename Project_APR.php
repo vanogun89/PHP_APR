@@ -15,27 +15,38 @@ function show_all($name_table, $user, $password)
     }
 }
 
+function inc_id($con, $table_name)
+{
+    $first_p = "SELECT id FROM $table_name";
+    $stid = oci_parse($con, $first_p);
+    oci_execute($stid);
+    $ert = array();
+    $r = oci_fetch_all($stid, $ert, OCI_ASSOC);
+    $new_id = max($ert["ID"]) + 1;
+    return $new_id;
+}
+
 function add_pers($user, $password, $name, $surname, $id_of_org)
 {
     $connection = oci_connect($user, $password, 'localhost/XEPDB1');
     if ($connection) {
-        $first_p = "SELECT id FROM Humans";
-        $stid = oci_parse($connection, $first_p);
+        $new_id = inc_id($connection, 'Human');
+        $text = "INSERT INTO HUMANS (ID, NAME, SURNAME, ID_OF_ORG) values ($new_id, $name, $surname, $id_of_org)";
+        $stid = oci_parse($connection, $text);
         oci_execute($stid);
-        $ert = array();
-        $r = oci_fetch_all($stid, $ert, OCI_ASSOC);
-        $new_id = max($ert["ID"]) + 1;
-        $text = "INSERT INTO HUMANS values ($new_id, $name, $surname, $id_of_org)";
     } else {
         echo "Not found";
     }
 }
 
-function add_org($user, $password)
+function add_org($user, $password, $name_of_work)
 {
     $connection = oci_connect($user, $password, 'localhost/XEPDB1');
     if ($connection) {
-
+        $new_id = inc_id($connection, 'ORGS');
+        $text = "INSERT INTO ORGS (ID, NAME_OF_WORK) values ($new_id, $name_of_work)";
+        $stid = oci_parse($connection, $text);
+        oci_execute($stid);
     } else {
         echo "Not found";
     }
@@ -69,4 +80,3 @@ function modify_org()
 {
 
 }
-
