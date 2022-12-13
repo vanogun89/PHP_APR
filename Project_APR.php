@@ -1,10 +1,11 @@
 <?php
 
-function show_all($name_table,$user, $password)
+function show_all($name_table, $user, $password)
 {
     $connection = oci_connect($user, $password, 'localhost/XEPDB1');
     if ($connection) {
-        $stid = oci_parse($connection, "SELECT * FROM $name_table");
+        $text = "SELECT * FROM $name_table";
+        $stid = oci_parse($connection, $text);
         oci_execute($stid);
         $ert = array();
         $r = oci_fetch_all($stid, $ert, OCI_ASSOC);
@@ -12,15 +13,6 @@ function show_all($name_table,$user, $password)
     } else {
         echo "Not found";
     }
-}
-function show_pers()
-{
-
-}
-
-function show_orgs()
-{
-
 }
 
 function add_pers()
