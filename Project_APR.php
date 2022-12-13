@@ -70,4 +70,3 @@ function modify_org()
 
 }
 
-add_pers('TEST', 'TEST');
