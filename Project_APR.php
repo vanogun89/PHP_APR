@@ -22,7 +22,11 @@ function inc_id($con, $table_name)
     oci_execute($stid);
     $ert = array();
     $r = oci_fetch_all($stid, $ert, OCI_ASSOC);
-    $new_id = max($ert["ID"]) + 1;
+    if (strtolower($table_name) == 'humans'){
+        $new_id = max($ert["ID"]) + 1;
+    } else if (strtolower($table_name) == 'orgs') {
+        $new_id = max($ert["ID"]) + 10;
+    }
     return $new_id;
 }
 
@@ -56,7 +60,7 @@ function delete_org($user, $password)
 {
     $connection = oci_connect($user, $password, 'localhost/XEPDB1');
     if ($connection) {
-
+        
     } else {
         echo "Not found";
     }
